@@ -1,5 +1,7 @@
-public class Driver{	
-	
+package defaul;
+
+public class Driver {	
+    // Entry class to store key-value pairs
     private static class Entry<K extends Comparable<K>, V> {
         K key;
         V value;
@@ -8,154 +10,174 @@ public class Driver{
             this.key = key;
             this.value = value;
         }
+
         @Override
         public String toString() {
             return "(" + key + ", " + value + ")";
         }
     }
 
-    private Entry<Integer, String>[] heap;
-    private int size;
-    private boolean isMinHeap;
+    private Entry<Integer, String>[] heap; // Array to store heap entries
+    private int size; // Current number of elements in the heap
+    private boolean isMinHeap; // Boolean flag to indicate if it's a min-heap or max-heap
 
     @SuppressWarnings("unchecked")
     public Driver(boolean isMinHeap) {
-        this.heap = new Entry[10];
-        this.size = 0;
-        this.isMinHeap = isMinHeap;
+        this.heap = new Entry[10]; // Initialize heap with capacity of 10
+        this.size = 0; // Initialize size to 0
+        this.isMinHeap = isMinHeap; // Set heap type (min or max)
     }
 
+    // Toggle the heap type and reheapify all elements
     public void toggle() {
-        isMinHeap = !isMinHeap;
+        isMinHeap = !isMinHeap; // Toggle the heap type
         for (int i = size / 2; i >= 0; i--) {
-            heapifyDown(i);
+            heapifyDown(i); // Reheapify all elements
         }
     }
 
+    // Remove and return the top element of the heap
     public Entry<Integer, String> removeTop() {
         if (isEmpty()) {
-            return null;
+            return null; // Return null if heap is empty
         }
-        Entry<Integer, String> top = heap[0];
-        heap[0] = heap[size - 1];
-        size--;
-        heapifyDown(0);
-        return top;
+        Entry<Integer, String> top = heap[0]; // Get top element
+        heap[0] = heap[size - 1]; // Move last element to top
+        size--; // Decrease size
+        heapifyDown(0); // Reheapify from the top
+        return top; // Return the removed top element
     }
 
+    // Insert a new key-value pair into the heap
     public Entry<Integer, String> insert(Integer key, String value) {
         if (size == heap.length) {
-            expandArray();
+            expandArray(); // Expand array if needed
         }
-        Entry<Integer, String> newEntry = new Entry<>(key, value);
-        heap[size] = newEntry;
-        size++;
-        heapifyUp(size - 1);
-        return newEntry;
+        Entry<Integer, String> newEntry = new Entry<>(key, value); // Create new entry
+        heap[size] = newEntry; // Add new entry to heap
+        size++; // Increase size
+        heapifyUp(size - 1); // Reheapify up from the new entry
+        return newEntry; // Return the inserted entry
     }
 
+    // Return the top element of the heap without removing it
     public Entry<Integer, String> top() {
-        return isEmpty() ? null : heap[0];
+        return isEmpty() ? null : heap[0]; // Return top element or null if empty
     }
 
+    // Remove and return a specific entry from the heap
     public Entry<Integer, String> remove(Entry<Integer, String> entry) {
-        int index = findEntryIndex(entry);
+        int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
-            return null;
+            return null; // Return null if entry not found
         }
-        Entry<Integer, String> removedEntry = heap[index];
-        heap[index] = heap[size - 1];
-        size--;
-        heapifyDown(index);
-        return removedEntry;
+        Entry<Integer, String> removedEntry = heap[index]; // Get the entry to be removed
+        heap[index] = heap[size - 1]; // Move last element to the index
+        size--; // Decrease size
+        heapifyDown(index); // Reheapify from the index
+        return removedEntry; // Return the removed entry
     }
 
+    // Replace the key of a specific entry and return the old key
     public Integer replaceKey(Entry<Integer, String> entry, Integer newKey) {
-        int index = findEntryIndex(entry);
+        int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
-            return null;
+            return null; // Return null if entry not found
         }
-        Integer oldKey = heap[index].key;
-        heap[index].key = newKey;
+        Integer oldKey = heap[index].key; // Get the old key
+        heap[index].key = newKey; // Set the new key
+        // Reheapify based on the new key
         if (isMinHeap ? newKey.compareTo(oldKey) < 0 : newKey.compareTo(oldKey) > 0) {
             heapifyUp(index);
         } else {
             heapifyDown(index);
         }
-        return oldKey;
+        return oldKey; // Return the old key
     }
 
+    // Replace the value of a specific entry and return the old value
     public String replaceValue(Entry<Integer, String> entry, String newValue) {
-        int index = findEntryIndex(entry);
+        int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
-            return null;
+            return null; // Return null if entry not found
         }
-        String oldValue = heap[index].value;
-        heap[index].value = newValue;
-        return oldValue;
+        String oldValue = heap[index].value; // Get the old value
+        heap[index].value = newValue; // Set the new value
+        return oldValue; // Return the old value
     }
 
+    // Return the current state of the heap (Min or Max)
     public String state() {
-        return isMinHeap ? "Min" : "Max";
+        return isMinHeap ? "Min" : "Max"; // Return "Min" or "Max" based on heap type
     }
 
+    // Check if the heap is empty
     public boolean isEmpty() {
-        return size == 0;
+        return size == 0; // Return true if size is 0, false otherwise
     }
 
+    // Return the current size of the heap
     public int size() {
-        return size;
+        return size; // Return the size
     }
 
+    // Heapify up from a given index
     private void heapifyUp(int index) {
         while (index > 0) {
-            int parent = (index - 1) / 2;
+            int parent = (index - 1) / 2; // Calculate parent index
+            // Swap if necessary based on heap type
             if (isMinHeap ? heap[index].key.compareTo(heap[parent].key) < 0 : heap[index].key.compareTo(heap[parent].key) > 0) {
                 swap(index, parent);
-                index = parent;
+                index = parent; // Move to parent index
             } else {
                 break;
             }
         }
     }
 
+    // Heapify down from a given index
     private void heapifyDown(int index) {
         while (index < size / 2) {
-            int leftChild = 2 * index + 1;
-            int rightChild = 2 * index + 2;
-            int target = leftChild;
+            int leftChild = 2 * index + 1; // Calculate left child index
+            int rightChild = 2 * index + 2; // Calculate right child index
+            int target = leftChild; // Set target to left child initially
+            // Determine which child to swap with based on heap type
             if (rightChild < size && (isMinHeap ? heap[rightChild].key.compareTo(heap[leftChild].key) < 0 : heap[rightChild].key.compareTo(heap[leftChild].key) > 0)) {
                 target = rightChild;
             }
+            // Swap if necessary based on heap type
             if (isMinHeap ? heap[index].key.compareTo(heap[target].key) > 0 : heap[index].key.compareTo(heap[target].key) < 0) {
                 swap(index, target);
-                index = target;
+                index = target; // Move to target index
             } else {
                 break;
             }
         }
     }
 
+    // Swap two elements in the heap
     private void swap(int index1, int index2) {
-        Entry<Integer, String> temp = heap[index1];
-        heap[index1] = heap[index2];
-        heap[index2] = temp;
+        Entry<Integer, String> temp = heap[index1]; // Temporary storage
+        heap[index1] = heap[index2]; // Swap elements
+        heap[index2] = temp; // Complete swap
     }
 
+    // Expand the heap array when it's full
     private void expandArray() {
         @SuppressWarnings("unchecked")
-        Entry<Integer, String>[] newHeap = new Entry[heap.length * 2];
-        System.arraycopy(heap, 0, newHeap, 0, heap.length);
-        heap = newHeap;
+        Entry<Integer, String>[] newHeap = new Entry[heap.length * 2]; // Create new array with double capacity
+        System.arraycopy(heap, 0, newHeap, 0, heap.length); // Copy elements to new array
+        heap = newHeap; // Update heap reference
     }
 
+    // Find the index of a specific entry
     private int findEntryIndex(Entry<Integer, String> entry) {
         for (int i = 0; i < size; i++) {
-            if (heap[i].equals(entry)) {
-                return i;
+            if (heap[i].equals(entry)) { // Check for equality
+                return i; // Return index if found
             }
         }
-        return -1;
+        return -1; // Return -1 if not found
     }
 
     public static void main(String[] args) {
@@ -164,10 +186,10 @@ public class Driver{
 
         // Insertion
         System.out.println("Inserting elements:");
-        System.out.println(spq.insert(10, "A")); // 1
-        System.out.println(spq.insert(5, "B")); // 2
-        System.out.println(spq.insert(20, "C")); // 3
-        System.out.println(spq.insert(1, "D")); // 4
+        System.out.println(spq.insert(10, "A")); // Insert 1
+        System.out.println(spq.insert(5, "B")); // Insert 2
+        System.out.println(spq.insert(20, "C")); // Insert 3
+        System.out.println(spq.insert(1, "D")); // Insert 4
 
         // Top element
         System.out.println("Top entry: " + spq.top()); // Should be (1, D)
@@ -177,9 +199,9 @@ public class Driver{
         System.out.println("Top entry after removing top: " + spq.top()); // Should be (5, B)
 
         // Additional insertions
-        System.out.println(spq.insert(15, "E")); // 5
-        System.out.println(spq.insert(30, "F")); // 6
-        System.out.println(spq.insert(2, "G")); // 7
+        System.out.println(spq.insert(15, "E")); // Insert 5
+        System.out.println(spq.insert(30, "F")); // Insert 6
+        System.out.println(spq.insert(2, "G")); // Insert 7
 
         // Toggle state
         spq.toggle(); // Change to Max-Heap
