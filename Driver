@@ -29,6 +29,8 @@ public class Driver {
     }
 
     // Toggle the heap type and reheapify all elements
+    // Time Complexity: O(n log n)
+    // Space Complexity: O(1)
     public void toggle() {
         isMinHeap = !isMinHeap; // Toggle the heap type
         for (int i = size / 2; i >= 0; i--) {
@@ -37,6 +39,8 @@ public class Driver {
     }
 
     // Remove and return the top element of the heap
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
     public Entry<Integer, String> removeTop() {
         if (isEmpty()) {
             return null; // Return null if heap is empty
@@ -49,6 +53,8 @@ public class Driver {
     }
 
     // Insert a new key-value pair into the heap
+    // Time Complexity: O(log n)
+    // Space Complexity: O(n)
     public Entry<Integer, String> insert(Integer key, String value) {
         if (size == heap.length) {
             expandArray(); // Expand array if needed
@@ -61,11 +67,15 @@ public class Driver {
     }
 
     // Return the top element of the heap without removing it
+    // Time Complexity: O(1)
+    // Space Complexity: O(1)
     public Entry<Integer, String> top() {
         return isEmpty() ? null : heap[0]; // Return top element or null if empty
     }
 
     // Remove and return a specific entry from the heap
+    // Time Complexity: O(n log n)
+    // Space Complexity: O(1)
     public Entry<Integer, String> remove(Entry<Integer, String> entry) {
         int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
@@ -79,6 +89,8 @@ public class Driver {
     }
 
     // Replace the key of a specific entry and return the old key
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
     public Integer replaceKey(Entry<Integer, String> entry, Integer newKey) {
         int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
@@ -96,6 +108,8 @@ public class Driver {
     }
 
     // Replace the value of a specific entry and return the old value
+    // Time Complexity: O(n)
+    // Space Complexity: O(1)
     public String replaceValue(Entry<Integer, String> entry, String newValue) {
         int index = findEntryIndex(entry); // Find the index of the entry
         if (index == -1) {
@@ -107,21 +121,29 @@ public class Driver {
     }
 
     // Return the current state of the heap (Min or Max)
+    // Time Complexity: O(1)
+    // Space Complexity: O(1)
     public String state() {
         return isMinHeap ? "Min" : "Max"; // Return "Min" or "Max" based on heap type
     }
 
     // Check if the heap is empty
+    // Time Complexity: O(1)
+    // Space Complexity: O(1)
     public boolean isEmpty() {
         return size == 0; // Return true if size is 0, false otherwise
     }
 
     // Return the current size of the heap
+    // Time Complexity: O(1)
+    // Space Complexity: O(1)
     public int size() {
         return size; // Return the size
     }
 
     // Heapify up from a given index
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
     private void heapifyUp(int index) {
         while (index > 0) {
             int parent = (index - 1) / 2; // Calculate parent index
@@ -136,6 +158,8 @@ public class Driver {
     }
 
     // Heapify down from a given index
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
     private void heapifyDown(int index) {
         while (index < size / 2) {
             int leftChild = 2 * index + 1; // Calculate left child index
