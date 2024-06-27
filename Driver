@@ -180,6 +180,8 @@ public class Driver {
     }
 
     // Swap two elements in the heap
+    // Time Complexity: O(1)
+    // Space Complexity: O(1)
     private void swap(int index1, int index2) {
         Entry<Integer, String> temp = heap[index1]; // Temporary storage
         heap[index1] = heap[index2]; // Swap elements
@@ -187,6 +189,8 @@ public class Driver {
     }
 
     // Expand the heap array when it's full
+    // Time Complexity: O(n)
+    // Space Complexity: O(n)
     private void expandArray() {
         @SuppressWarnings("unchecked")
         Entry<Integer, String>[] newHeap = new Entry[heap.length * 2]; // Create new array with double capacity
@@ -195,6 +199,8 @@ public class Driver {
     }
 
     // Find the index of a specific entry
+    // Time Complexity: O(n)
+    // Space Complexity: O(1)
     private int findEntryIndex(Entry<Integer, String> entry) {
         for (int i = 0; i < size; i++) {
             if (heap[i].equals(entry)) { // Check for equality
