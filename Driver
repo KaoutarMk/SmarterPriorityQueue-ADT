@@ -205,7 +205,9 @@ public class Driver {
 
         // Toggle state
         spq.toggle(); // Change to Max-Heap
-      
+        System.out.println("State after toggle: " + spq.state()); // Should be Max
+        System.out.println("Top entry in Max-Heap: " + spq.top()); // Should be (30
+
         System.out.println("State after toggle: " + spq.state()); // Should be Max
         System.out.println("Top entry in Max-Heap: " + spq.top()); // Should be (30, F)
 
